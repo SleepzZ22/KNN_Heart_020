@@ -28,16 +28,19 @@ dt = pd.read_csv("./data/Heart3.csv")
 st.write(dt.head(10))
 
 dt1 = dt['Age'].sum()
-dt2 = dt['Sex'].sum()
-dt3 = dt['ChestPainType'].sum()
-dt4 = dt['RestingBP'].sum()
-dt5 = dt['Cholesterol'].sum()
-dt6 = dt['FastingBS'].sum()
-dt7 = dt['RestingECG'].sum()
-dt8 = dt['MaxHR'].sum()
-dt9 = dt['ExerciseAngina'].sum()
-dt10 = dt['Oldpeak'].sum()
-dt11 = dt['ST_Slope'].sum()
+col1, col2 = st.columns(2)
+with col1:
+   dt2 = dt['Sex'].sum()
+   dt3 = dt['ChestPainType'].sum()
+   dt4 = dt['RestingBP'].sum()
+   dt5 = dt['Cholesterol'].sum()
+   dt6 = dt['FastingBS'].sum()
+with col2:
+   dt7 = dt['RestingECG'].sum()
+   dt8 = dt['MaxHR'].sum()
+   dt9 = dt['ExerciseAngina'].sum()
+   dt10 = dt['Oldpeak'].sum()
+   dt11 = dt['ST_Slope'].sum()
 
 dx = [dt1, dt2, dt3, dt4, dt5, dt6, dt7, dt8, dt9, dt10, dt11]
 dx2 = pd.DataFrame(dx, index=["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9", "d10", "d11" ])
@@ -50,7 +53,7 @@ else:
     st.write("ไม่แสดงข้อมูล")
 
 html_8 = """
-<div style="background-color:white;padding:15px;border-radius:15px 15px 15px 15px;border-style:'solid';border-color:black">
+<div style="background-color:#6BD5DA;padding:15px;border-radius:15px 15px 15px 15px;border-style:'solid';border-color:black">
 <center><h5>ทำนายข้อมูล</h5></center>
 </div>
 """
