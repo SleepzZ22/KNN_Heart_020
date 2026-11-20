@@ -58,25 +58,25 @@ st.markdown(html_8, unsafe_allow_html=True)
 st.markdown("")
 
 #1
-pt_age = st.slider("กรุณาเลือกข้อมูล Age")
+pt_age = st.slider("กรุณาเลือกข้อมูล Age", min_value=0, max_value=100)
 #2
 pt_sex = st.number_input("กรุณาเลือกข้อมูล sex", min_value=0, max_value=1)
 #3
 sp_ChestPainType = st.number_input("กรุณาเลือกข้อมูล ChestPainType", min_value=0, max_value=3)
 #4
-sp_RestingBP = st.number_input("กรุณาเลือกข้อมูล RestingBP")
+sp_RestingBP = st.number_input("กรุณาเลือกข้อมูล RestingBP", min_value=0)
 #5
-sp_Cholesterol = st.number_input("กรุณาเลือกข้อมูล Cholesterol")  
+sp_Cholesterol = st.number_input("กรุณาเลือกข้อมูล Cholesterol", min_value=0)  
 #6
 sp_FastingBS = st.number_input("กรุณาเลือกข้อมูล FastingBS", min_value=0, max_value=1)
 #7
 sp_RestingECG = st.number_input("กรุณาเลือกข้อมูล RestingECG", min_value=0, max_value=2)
 #8
-sp_MaxHR = st.number_input("กรุณาเลือกข้อมูล MaxHR")
+sp_MaxHR = st.number_input("กรุณาเลือกข้อมูล MaxHR", min_value=0)
 #9
 sp_ExerciseAngina = st.number_input("กรุณาเลือกข้อมูล ExerciseAngina", min_value=0, max_value=1)
 #10
-sp_Oldpeak = st.number_input("กรุณาเลือกข้อมูล Oldpeak")
+sp_Oldpeak = st.number_input("กรุณาเลือกข้อมูล Oldpeak", min_value=0)
 #11
 sp_ST_Slope = st.number_input("กรุณาเลือกข้อมูล ST_Slope", min_value=0)
 
