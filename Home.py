@@ -77,16 +77,24 @@ div[data-testid="stDecoration"] {display: none;}
     padding: 10px 14px;
     background-color: #101726;
     border: 1px solid #1e2d4a;
-    border-bottom: none;
+    border-bottom: 1px solid #162238;
     border-radius: 8px 8px 0 0;
     text-align: center;
 }
 
-/* Clean Images */
-img {
-    border-radius: 0 0 8px 8px;
-    border: 1px solid #1e2d4a;
-    max-width: 100%;
+/* Uniform Image Display for perfectly matched sizes */
+[data-testid="stImage"] {
+    width: 100% !important;
+}
+
+[data-testid="stImage"] > img {
+    width: 100% !important;
+    height: 300px !important;
+    object-fit: cover !important;
+    border-radius: 0 0 8px 8px !important;
+    border: 1px solid #1e2d4a !important;
+    border-top: none !important;
+    display: block !important;
 }
 
 /* Result Cards */
