@@ -59,8 +59,8 @@ html_8 = """
 st.markdown(html_8, unsafe_allow_html=True)
 st.markdown("")
 
-input_col1, input_col2 = st.columns(2)
 pt_age = st.slider("กรุณาเลือกข้อมูล Age", min_value=0, max_value=100)
+input_col1, input_col2 = st.columns(2)
 
 with input_col1: 
    pt_sex = st.number_input("กรุณาเลือกข้อมูล sex", min_value=0, max_value=1)
