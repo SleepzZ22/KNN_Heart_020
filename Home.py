@@ -97,6 +97,31 @@ div[data-testid="stDecoration"] {display: none;}
     display: block !important;
 }
 
+/* Metrics Styling */
+[data-testid="stMetric"] {
+    background-color: #101726;
+    border: 1px solid #1e2d4a;
+    border-radius: 8px;
+    padding: 14px 18px;
+}
+[data-testid="stMetricValue"] {
+    color: #60a5fa !important;
+    font-size: 1.35rem !important;
+    font-weight: 600 !important;
+}
+[data-testid="stMetricLabel"] {
+    color: #94a3b8 !important;
+    font-size: 0.88rem !important;
+}
+
+/* Selectbox */
+.stSelectbox > div > div {
+    background-color: #0d1322 !important;
+    color: #f1f5f9 !important;
+    border: 1px solid #1e2d4a !important;
+    border-radius: 6px !important;
+}
+
 /* Result Cards */
 .result-card-positive {
     background-color: #141b2b;
@@ -212,25 +237,60 @@ dt = pd.read_csv("./data/Heart3.csv")
 st.dataframe(dt.head(10))
 
 # Data Visualization Section
-dt1 = dt['Age'].sum()
-dt2 = dt['Sex'].sum()
-dt3 = dt['ChestPainType'].sum()
-dt4 = dt['RestingBP'].sum()
-dt5 = dt['Cholesterol'].sum()
-dt6 = dt['FastingBS'].sum()
-dt7 = dt['RestingECG'].sum()
-dt8 = dt['MaxHR'].sum()
-dt9 = dt['ExerciseAngina'].sum()
-dt10 = dt['Oldpeak'].sum()
-dt11 = dt['ST_Slope'].sum()
+show_viz = st.checkbox("แสดงแผนภูมิวิเคราะห์ข้อมูลทางสถิติ", value=False)
 
-dx = [dt1, dt2, dt3, dt4, dt5, dt6, dt7, dt8, dt9, dt10, dt11]
-feature_labels = ["Age", "Sex", "ChestPainType", "RestingBP", "Cholesterol", "FastingBS", "RestingECG", "MaxHR", "ExerciseAngina", "Oldpeak", "ST_Slope"]
-dx2 = pd.DataFrame(dx, index=feature_labels, columns=["ผลรวมค่าคุณลักษณะ"])
-
-show_viz = st.checkbox("แสดงแผนภูมิภาพรวมข้อมูล", value=False)
 if show_viz:
-    st.bar_chart(dx2)
+    # 3 Summary Metrics in Minimalist Dark-Navy Cards
+    m_col1, m_col2, m_col3 = st.columns(3)
+    total_records = len(dt)
+    normal_count = int((dt['HeartDisease'] == 0).sum())
+    disease_count = int((dt['HeartDisease'] == 1).sum())
+    normal_pct = (normal_count / total_records) * 100
+    disease_pct = (disease_count / total_records) * 100
+
+    with m_col1:
+        st.metric("จำนวนกลุ่มตัวอย่างทั้งหมด", f"{total_records:,} ราย")
+    with m_col2:
+        st.metric("สุขภาพปกติ (ไม่พบโรค)", f"{normal_count:,} ราย", f"{normal_pct:.1f}%")
+    with m_col3:
+        st.metric("พบความเสี่ยงโรคหัวใจ", f"{disease_count:,} ราย", f"{disease_pct:.1f}%")
+
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    viz_choice = st.selectbox(
+        "เลือกมุมมองแผนภูมิข้อมูลที่ต้องการวิเคราะห์:",
+        [
+            "เปรียบเทียบค่าเฉลี่ยตัวแปรสุขภาพสำคัญ (ปกติ vs พบโรคหัวใจ)",
+            "สัดส่วนปัจจัยเสี่ยงทางคลินิก (%)",
+            "สัดส่วนจำนวนผู้ป่วยตามผลการวินิจฉัย (Distribution)"
+        ]
+    )
+
+    if viz_choice == "เปรียบเทียบค่าเฉลี่ยตัวแปรสุขภาพสำคัญ (ปกติ vs พบโรคหัวใจ)":
+        metrics_cols = ['Age', 'RestingBP', 'Cholesterol', 'MaxHR']
+        mean_df = dt.groupby('HeartDisease')[metrics_cols].mean().round(1).T
+        mean_df.columns = ["ไม่พบโรคหัวใจ", "พบความเสี่ยงโรคหัวใจ"]
+        mean_df.index = ["อายุเฉลี่ย (ปี)", "ความดันโลหิตเฉลี่ย (mmHg)", "คอเลสเตอรอลเฉลี่ย (mg/dl)", "อัตราเต้นหัวใจสูงสุด (bpm)"]
+        st.bar_chart(mean_df)
+        st.caption("เปรียบเทียบค่าเฉลี่ยตัวแปรสรีรวิทยาสำคัญ สเกลข้อมูลมีความสอดคล้องและสัมพันธ์กัน")
+
+    elif viz_choice == "สัดส่วนปัจจัยเสี่ยงทางคลินิก (%)":
+        risk_male = (dt.groupby('HeartDisease')['Sex'].mean() * 100).round(1)
+        risk_fbs = (dt.groupby('HeartDisease')['FastingBS'].mean() * 100).round(1)
+        risk_angina = (dt.groupby('HeartDisease')['ExerciseAngina'].mean() * 100).round(1)
+
+        risk_df = pd.DataFrame({
+            "ไม่พบโรคหัวใจ": [risk_male[0], risk_fbs[0], risk_angina[0]],
+            "พบความเสี่ยงโรคหัวใจ": [risk_male[1], risk_fbs[1], risk_angina[1]]
+        }, index=["เพศชาย (%)", "น้ำตาลในเลือดสูง >120 mg/dl (%)", "แน่นหน้าอกจากการออกกำลังกาย (%)"])
+        st.bar_chart(risk_df)
+        st.caption("สัดส่วนร้อยละของปัจจัยเสี่ยงทางคลินิกในแต่ละกลุ่ม (สเกลมาตรฐาน 0 - 100%)")
+
+    else:
+        target_counts = dt['HeartDisease'].value_counts().rename(index={0: "ไม่พบโรคหัวใจ", 1: "พบความเสี่ยงโรคหัวใจ"})
+        target_df = pd.DataFrame({"จำนวนกลุ่มตัวอย่าง (ราย)": target_counts})
+        st.bar_chart(target_df)
+        st.caption("สัดส่วนจำนวนกลุ่มตัวอย่างทั้งหมด 918 ราย จำแนกตามผลการวินิจฉัย")
 
 # Prediction Form Section
 st.markdown("""
