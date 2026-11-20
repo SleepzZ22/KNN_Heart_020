@@ -62,7 +62,7 @@ pt_age = st.slider("กรุณาเลือกข้อมูล Age", min_v
 #2
 pt_sex = st.number_input("กรุณาเลือกข้อมูล sex", min_value=0, max_value=1)
 #3
-sp_ChestPainType = st.number_input("กรุณาเลือกข้อมูล ChestPainType", min_value=0, max_value=3)
+sp_ChestPainType = st.number_input("กรุณาเลือกข้อมูล ChestPainType", min_value=0)
 #4
 sp_RestingBP = st.number_input("กรุณาเลือกข้อมูล RestingBP", min_value=0)
 #5
@@ -70,7 +70,7 @@ sp_Cholesterol = st.number_input("กรุณาเลือกข้อมู�
 #6
 sp_FastingBS = st.number_input("กรุณาเลือกข้อมูล FastingBS", min_value=0, max_value=1)
 #7
-sp_RestingECG = st.number_input("กรุณาเลือกข้อมูล RestingECG", min_value=0, max_value=2)
+sp_RestingECG = st.number_input("กรุณาเลือกข้อมูล RestingECG", min_value=0)
 #8
 sp_MaxHR = st.number_input("กรุณาเลือกข้อมูล MaxHR", min_value=0)
 #9
@@ -94,9 +94,9 @@ if st.button("ทำนายผล"):
    st.write(Knn_model.predict(x_input))   
    out=Knn_model.predict(x_input)
 
-   if out[0] == 'เป็นโรคหัวใจ':
-    st.image("./img/Disease.jpg")
-   elif out[0] == 'ไม่เป็นโรคหัวใจ':       
-    st.image("./img/UnDisease.jpg")
+   if out == 1:
+    st.image("./img/Disease.jpg", caption="ผลทำนาย: พบโรคหัวใจ")
+   else:
+    st.image("./img/UnDisease.jpg", caption="ผลทำนาย: ไม่พบโรคหัวใจ")
 else:
     st.write("ไม่ทำนาย")
