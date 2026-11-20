@@ -4,21 +4,18 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-st.header("โปรเจคการจำแนกข้อมูลดอกไม้")
+st.header("โปรเจคการจำแนกโรคหัวใจด้วย KNN")
 #st.image("./img/kairung022.jpg")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-   st.header("Versicolor")
-   st.image("./img/iris1.jpg")
+   st.header("เป็นโรคหัวใจ")
+   st.image("./img/Disease.jpg")
 
 with col2:
-   st.header("Verginiga")
-   st.image("./img/iris2.jpg")
+   st.header("ไม่เป็นโรคหัวใจ")
+   st.image("./img/UnDisease.jpg")
 
-with col3:
-   st.header("Setosa")
-   st.image("./img/iris3.jpg")
 
 html_7 = """
 <div style="background-color:#EC7063;padding:15px;border-radius:15px 15px 15px 15px;border-style:'solid';border-color:black">
@@ -27,16 +24,23 @@ html_7 = """
 """
 st.markdown(html_7, unsafe_allow_html=True)
 st.markdown("")
-dt = pd.read_csv("./data/iris.csv")
+dt = pd.read_csv("./data/Heart3.csv")
 st.write(dt.head(10))
 
-dt1 = dt['petallength'].sum()
-dt2 = dt['petalwidth'].sum()
-dt3 = dt['sepallength'].sum()
-dt4 = dt['sepalwidth'].sum()
+dt1 = dt['Age'].sum()
+dt2 = dt['Sex'].sum()
+dt3 = dt['ChestPainType'].sum()
+dt4 = dt['RestingBP'].sum()
+dt5 = dt['Cholesterol'].sum()
+dt6 = dt['FastingBS'].sum()
+dt7 = dt['RestingECG'].sum()
+dt8 = dt['MaxHR'].sum()
+dt9 = dt['ExerciseAngina'].sum()
+dt10 = dt['Oldpeak'].sum()
+dt11 = dt['ST_Slope'].sum()
 
-dx = [dt1, dt2, dt3, dt4]
-dx2 = pd.DataFrame(dx, index=["d1", "d2", "d3", "d4"])
+dx = [dt1, dt2, dt3, dt4, dt5, dt6, dt7, dt8, dt9, dt10, dt11]
+dx2 = pd.DataFrame(dx, index=["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9", "d10", "d11" ])
 
 if st.button("แสดงการจินตทัศน์ข้อมูล"):
    #st.write(dt.head(10))
@@ -74,11 +78,9 @@ if st.button("ทำนายผล"):
    st.write(Knn_model.predict(x_input))   
    out=Knn_model.predict(x_input)
 
-   if out[0] == 'Setosa':
+   if out[0] == 'เป็นโรคหัวใจ':
     st.image("./img/iris1.jpg")
-   elif out[0] == 'Versicolor':       
+   elif out[0] == 'ไม่เป็นโรคหัวใจ':       
     st.image("./img/iris2.jpg")
-   else:
-    st.image("./img/iris3.jpg")
 else:
     st.write("ไม่ทำนาย")
