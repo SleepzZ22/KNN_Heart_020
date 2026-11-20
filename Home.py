@@ -96,7 +96,7 @@ if st.button("ทำนายผล"):
 
    if out[0] == 'เป็นโรคหัวใจ':
     st.image("./img/Disease.jpg")
-   elif out[1] == 'ไม่เป็นโรคหัวใจ':       
+   elif out[0] == 'ไม่เป็นโรคหัวใจ':       
     st.image("./img/UnDisease.jpg")
 else:
     st.write("ไม่ทำนาย")
