@@ -80,7 +80,7 @@ div[data-testid="stDecoration"] {display: none;}
     margin: 0;
 }
 
-/* Enlarged Student Profile Card (Top-Right) */
+/* Perfectly Fitted Student Profile Card (Top-Right) */
 .student-profile-card {
     display: flex;
     align-items: center;
@@ -88,7 +88,7 @@ div[data-testid="stDecoration"] {display: none;}
     background-color: #0b0f19;
     border: 1px solid #1e3a5f;
     border-radius: 10px;
-    padding: 12px 16px 12px 18px;
+    padding: 12px 18px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 .student-info {
@@ -96,39 +96,59 @@ div[data-testid="stDecoration"] {display: none;}
     flex-direction: column;
     justify-content: center;
     text-align: right;
-    gap: 3px;
+    gap: 4px;
 }
 .student-name {
     color: #ffffff;
-    font-size: 1.12rem;
+    font-size: 1.15rem;
     font-weight: 600;
     letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 .student-id {
     color: #60a5fa;
     font-size: 0.96rem;
     font-weight: 500;
+    line-height: 1.3;
 }
 .student-dept {
     color: #94a3b8;
     font-size: 0.88rem;
+    line-height: 1.3;
 }
 .student-img-wrapper {
-    width: 95px;
-    height: 115px;
+    width: 96px;
+    height: 96px;
+    min-width: 96px;
+    min-height: 96px;
+    max-width: 96px;
+    max-height: 96px;
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid #2563eb;
-    background-color: #101726;
+    background-color: #0b0f19;
     flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
 }
-.student-full-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 20%;
-    display: block;
+.student-img-wrapper img.student-full-img {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 6px !important;
 }
 
 /* Section Banner */
@@ -297,7 +317,7 @@ div.stButton > button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-# Header Section with Large Profile Card at Top-Right
+# Header Section with Perfectly Fitted Profile Card at Top-Right
 header_html = f"""
 <div class="header-box">
     <div class="header-left">
