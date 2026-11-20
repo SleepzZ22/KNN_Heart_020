@@ -84,8 +84,8 @@ if st.button("ทำนายผล"):
    #st.write("ทำนาย")
    #dt = pd.read_csv("./data/iris.csv")   
 
-   X = dt.drop('variety', axis=1)
-   y = dt.variety   
+   X = dt.drop('HeartDisease', axis=1)
+   y = dt.HeartDisease   
    Knn_model = KNeighborsClassifier(n_neighbors=3)
    Knn_model.fit(X, y)  
 
