@@ -58,7 +58,7 @@ st.markdown(html_8, unsafe_allow_html=True)
 st.markdown("")
 
 
-pt_age = st.number_input("กรุณาเลือกข้อมูล Age")
+pt_age = int.number_input("กรุณาเลือกข้อมูล Age")
 pt_sex = st.slider("กรุณาเลือกข้อมูล sex")
 
 sp_len = st.number_input("กรุณาเลือกข้อมูล sepal.length")
