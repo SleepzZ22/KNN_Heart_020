@@ -57,12 +57,28 @@ html_8 = """
 st.markdown(html_8, unsafe_allow_html=True)
 st.markdown("")
 
-
+#1
 pt_age = st.slider("กรุณาเลือกข้อมูล Age")
+#2
 pt_sex = st.number_input("กรุณาเลือกข้อมูล sex", min_value=0, max_value=1)
-
-sp_len = st.number_input("กรุณาเลือกข้อมูล sepal.length")
-sp_wd = st.number_input("กรุณาเลือกข้อมูล sepal.width")
+#3
+sp_ChestPainType = st.number_input("กรุณาเลือกข้อมูล ChestPainType", min_value=0, max_value=3)
+#4
+sp_RestingBP = st.number_input("กรุณาเลือกข้อมูล RestingBP")
+#5
+sp_Cholesterol = st.number_input("กรุณาเลือกข้อมูล Cholesterol")  
+#6
+sp_FastingBS = st.number_input("กรุณาเลือกข้อมูล FastingBS", min_value=0, max_value=1)
+#7
+sp_RestingECG = st.number_input("กรุณาเลือกข้อมูล RestingECG", min_value=0, max_value=2)
+#8
+sp_MaxHR = st.number_input("กรุณาเลือกข้อมูล MaxHR")
+#9
+sp_ExerciseAngina = st.number_input("กรุณาเลือกข้อมูล ExerciseAngina", min_value=0, max_value=1)
+#10
+sp_Oldpeak = st.number_input("กรุณาเลือกข้อมูล Oldpeak")
+#11
+sp_ST_Slope = st.number_input("กรุณาเลือกข้อมูล ST_Slope", min_value=0, max_value=2)
 
 if st.button("ทำนายผล"):
    #st.write("ทำนาย")
