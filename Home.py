@@ -2,6 +2,8 @@ from sklearn.neighbors import KNeighborsClassifier
 import streamlit as st
 import pandas as pd
 import numpy as np
+import base64
+import os
 
 try:
     import plotly.graph_objects as go
@@ -15,6 +17,17 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# Helper function to load base64 image
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return ""
+
+ohm_img_b64 = get_base64_image("./img/Ohm.jpg")
+if not ohm_img_b64:
+    ohm_img_b64 = get_base64_image("./img/Ohm.webp")
 
 # Custom Minimalist Dark-Navy Theme
 st.markdown("""
@@ -37,13 +50,22 @@ footer {visibility: hidden;}
 header {visibility: hidden;}
 div[data-testid="stDecoration"] {display: none;}
 
-/* Header Card */
+/* Header Card with Top-Right Profile */
 .header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: linear-gradient(180deg, #101726 0%, #0d1322 100%);
     border: 1px solid #1e2d4a;
     border-radius: 8px;
-    padding: 24px 28px;
+    padding: 22px 26px;
     margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.header-left {
+    flex: 1;
+    min-width: 300px;
 }
 .header-title {
     color: #f8fafc;
@@ -56,6 +78,42 @@ div[data-testid="stDecoration"] {display: none;}
     color: #94a3b8;
     font-size: 0.95rem;
     margin: 0;
+}
+
+/* Student Profile Card (Top-Right) */
+.student-profile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: #0b0f19;
+    border: 1px solid #1e2d4a;
+    border-radius: 8px;
+    padding: 10px 16px;
+}
+.student-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #2563eb;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.25);
+}
+.student-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+}
+.student-id {
+    color: #f8fafc;
+    font-size: 0.96rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+.student-dept {
+    color: #94a3b8;
+    font-size: 0.84rem;
+    margin-top: 2px;
 }
 
 /* Section Banner */
@@ -104,14 +162,7 @@ div[data-testid="stDecoration"] {display: none;}
     display: block !important;
 }
 
-/* Chart Container Card */
-.chart-card {
-    background-color: #101726;
-    border: 1px solid #1e2d4a;
-    border-radius: 8px;
-    padding: 18px 20px 12px 20px;
-    height: 100%;
-}
+/* Chart Container Header */
 .chart-card-header {
     color: #cbd5e1;
     font-size: 0.96rem;
@@ -231,13 +282,23 @@ div.stButton > button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-# Header Section
-st.markdown("""
+# Header Section with Top-Right Student Info & Ohm.jpg
+header_html = f"""
 <div class="header-box">
-    <div class="header-title">ระบบจำแนกโรคหัวใจด้วยอัลกอริทึม K-Nearest Neighbors</div>
-    <div class="header-subtitle">การวิเคราะห์และประเมินความเสี่ยงโรคหัวใจจากชุดข้อมูลสุขภาพทางคลินิก</div>
+    <div class="header-left">
+        <div class="header-title">ระบบจำแนกโรคหัวใจด้วยอัลกอริทึม K-Nearest Neighbors</div>
+        <div class="header-subtitle">การวิเคราะห์และประเมินความเสี่ยงโรคหัวใจจากชุดข้อมูลสุขภาพทางคลินิก</div>
+    </div>
+    <div class="student-profile">
+        <div class="student-info">
+            <div class="student-id">รหัสนักศึกษา: 674230020</div>
+            <div class="student-dept">สาขาเทคโนโลยีสารสนเทศ</div>
+        </div>
+        <img src="data:image/jpeg;base64,{ohm_img_b64}" class="student-avatar" alt="Ohm">
+    </div>
 </div>
-""", unsafe_allow_html=True)
+"""
+st.markdown(header_html, unsafe_allow_html=True)
 
 # Overview Cards
 col1, col2 = st.columns(2)
