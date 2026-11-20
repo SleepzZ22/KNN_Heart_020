@@ -78,7 +78,7 @@ sp_ExerciseAngina = st.number_input("กรุณาเลือกข้อม�
 #10
 sp_Oldpeak = st.number_input("กรุณาเลือกข้อมูล Oldpeak")
 #11
-sp_ST_Slope = st.number_input("กรุณาเลือกข้อมูล ST_Slope", min_value=0, max_value=2)
+sp_ST_Slope = st.number_input("กรุณาเลือกข้อมูล ST_Slope", min_value=0)
 
 if st.button("ทำนายผล"):
    #st.write("ทำนาย")
