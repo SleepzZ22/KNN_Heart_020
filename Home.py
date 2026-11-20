@@ -60,9 +60,9 @@ st.markdown(html_8, unsafe_allow_html=True)
 st.markdown("")
 
 input_col1, input_col2 = st.columns(2)
+pt_age = st.slider("กรุณาเลือกข้อมูล Age", min_value=0, max_value=100)
 
-with input_col1:
-   pt_age = st.slider("กรุณาเลือกข้อมูล Age", min_value=0, max_value=100)
+with input_col1: 
    pt_sex = st.number_input("กรุณาเลือกข้อมูล sex", min_value=0, max_value=1)
    sp_ChestPainType = st.number_input("กรุณาเลือกข้อมูล ChestPainType", min_value=0)
    sp_RestingBP = st.number_input("กรุณาเลือกข้อมูล RestingBP", min_value=0)
