@@ -89,14 +89,14 @@ if st.button("ทำนายผล"):
    Knn_model = KNeighborsClassifier(n_neighbors=3)
    Knn_model.fit(X, y)  
 
-   x_input = np.array([[pt_len, pt_wd, sp_len, sp_wd]]) #ข้อมูลใหม่สำหรับทำนาย
+   x_input = np.array([[pt_age, pt_sex, sp_ChestPainType, sp_RestingBP, sp_Cholesterol, sp_FastingBS, sp_RestingECG, sp_MaxHR, sp_ExerciseAngina, sp_Oldpeak, sp_ST_Slope]]) #ข้อมูลใหม่สำหรับทำนาย
 
    st.write(Knn_model.predict(x_input))   
    out=Knn_model.predict(x_input)
 
    if out[0] == 'เป็นโรคหัวใจ':
-    st.image("./img/iris1.jpg")
+    st.image("./img/Disease.jpg")
    elif out[0] == 'ไม่เป็นโรคหัวใจ':       
-    st.image("./img/iris2.jpg")
+    st.image("./img/UnDisease.jpg")
 else:
     st.write("ไม่ทำนาย")
