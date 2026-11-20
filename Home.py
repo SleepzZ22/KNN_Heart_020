@@ -57,19 +57,19 @@ div[data-testid="stDecoration"] {display: none;}
     align-items: center;
     background: linear-gradient(180deg, #101726 0%, #0d1322 100%);
     border: 1px solid #1e2d4a;
-    border-radius: 8px;
-    padding: 22px 26px;
+    border-radius: 10px;
+    padding: 22px 28px;
     margin-bottom: 24px;
-    gap: 16px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 .header-left {
     flex: 1;
-    min-width: 300px;
+    min-width: 320px;
 }
 .header-title {
     color: #f8fafc;
-    font-size: 1.55rem;
+    font-size: 1.6rem;
     font-weight: 600;
     margin: 0 0 6px 0;
     letter-spacing: -0.01em;
@@ -80,40 +80,55 @@ div[data-testid="stDecoration"] {display: none;}
     margin: 0;
 }
 
-/* Student Profile Card (Top-Right) */
-.student-profile {
+/* Enlarged Student Profile Card (Top-Right) */
+.student-profile-card {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     background-color: #0b0f19;
-    border: 1px solid #1e2d4a;
-    border-radius: 8px;
-    padding: 10px 16px;
-}
-.student-avatar {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #2563eb;
-    box-shadow: 0 0 10px rgba(37, 99, 235, 0.25);
+    border: 1px solid #1e3a5f;
+    border-radius: 10px;
+    padding: 12px 16px 12px 18px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 .student-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: right;
+    gap: 3px;
+}
+.student-name {
+    color: #ffffff;
+    font-size: 1.12rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 .student-id {
-    color: #f8fafc;
+    color: #60a5fa;
     font-size: 0.96rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-weight: 500;
 }
 .student-dept {
     color: #94a3b8;
-    font-size: 0.84rem;
-    margin-top: 2px;
+    font-size: 0.88rem;
+}
+.student-img-wrapper {
+    width: 95px;
+    height: 115px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #2563eb;
+    background-color: #101726;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+}
+.student-full-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    display: block;
 }
 
 /* Section Banner */
@@ -282,19 +297,22 @@ div.stButton > button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-# Header Section with Top-Right Student Info & Ohm.jpg
+# Header Section with Large Profile Card at Top-Right
 header_html = f"""
 <div class="header-box">
     <div class="header-left">
         <div class="header-title">ระบบจำแนกโรคหัวใจด้วยอัลกอริทึม K-Nearest Neighbors</div>
         <div class="header-subtitle">การวิเคราะห์และประเมินความเสี่ยงโรคหัวใจจากชุดข้อมูลสุขภาพทางคลินิก</div>
     </div>
-    <div class="student-profile">
+    <div class="student-profile-card">
         <div class="student-info">
+            <div class="student-name">นาย ปรเมศ ไม้ประเสริฐ</div>
             <div class="student-id">รหัสนักศึกษา: 674230020</div>
             <div class="student-dept">สาขาเทคโนโลยีสารสนเทศ</div>
         </div>
-        <img src="data:image/jpeg;base64,{ohm_img_b64}" class="student-avatar" alt="Ohm">
+        <div class="student-img-wrapper">
+            <img src="data:image/jpeg;base64,{ohm_img_b64}" class="student-full-img" alt="นาย ปรเมศ ไม้ประเสริฐ">
+        </div>
     </div>
 </div>
 """
