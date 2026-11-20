@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 st.header("โปรเจคการจำแนกโรคหัวใจด้วย KNN")
 #st.image("./img/kairung022.jpg")
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 
 with col1:
    st.header("เป็นโรคหัวใจ")
@@ -58,15 +58,15 @@ st.markdown(html_8, unsafe_allow_html=True)
 st.markdown("")
 
 
-pt_len = st.slider("กรุณาเลือกข้อมูล petal.length")
-pt_wd = st.slider("กรุณาเลือกข้อมูล petal.width")
+pt_age = st.number_input("กรุณาเลือกข้อมูล Age")
+pt_sex = st.slider("กรุณาเลือกข้อมูล sex")
 
 sp_len = st.number_input("กรุณาเลือกข้อมูล sepal.length")
 sp_wd = st.number_input("กรุณาเลือกข้อมูล sepal.width")
 
 if st.button("ทำนายผล"):
    #st.write("ทำนาย")
-   #dt = pd.read_csv("./data/iris.csv") 
+   #dt = pd.read_csv("./data/iris.csv")   
 
    X = dt.drop('variety', axis=1)
    y = dt.variety   
