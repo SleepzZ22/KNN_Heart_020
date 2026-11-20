@@ -3,6 +3,13 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+try:
+    import plotly.graph_objects as go
+    HAS_PLOTLY = True
+except ImportError:
+    HAS_PLOTLY = False
+    import matplotlib.pyplot as plt
+
 st.set_page_config(
     page_title="การจำแนกโรคหัวใจด้วย KNN",
     layout="wide",
@@ -95,6 +102,22 @@ div[data-testid="stDecoration"] {display: none;}
     border: 1px solid #1e2d4a !important;
     border-top: none !important;
     display: block !important;
+}
+
+/* Chart Container Card */
+.chart-card {
+    background-color: #101726;
+    border: 1px solid #1e2d4a;
+    border-radius: 8px;
+    padding: 18px 20px 12px 20px;
+    height: 100%;
+}
+.chart-card-header {
+    color: #cbd5e1;
+    font-size: 0.96rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: center;
 }
 
 /* Metrics Styling */
@@ -237,17 +260,17 @@ dt = pd.read_csv("./data/Heart3.csv")
 st.dataframe(dt.head(10))
 
 # Data Visualization Section
-show_viz = st.checkbox("แสดงแผนภูมิวิเคราะห์ข้อมูลทางสถิติ", value=False)
+show_viz = st.checkbox("แสดงแผนภูมิวิเคราะห์ข้อมูลทางสถิติ", value=True)
 
 if show_viz:
-    # 3 Summary Metrics in Minimalist Dark-Navy Cards
-    m_col1, m_col2, m_col3 = st.columns(3)
     total_records = len(dt)
     normal_count = int((dt['HeartDisease'] == 0).sum())
     disease_count = int((dt['HeartDisease'] == 1).sum())
     normal_pct = (normal_count / total_records) * 100
     disease_pct = (disease_count / total_records) * 100
 
+    # 3 Summary Metrics in Minimalist Dark-Navy Cards
+    m_col1, m_col2, m_col3 = st.columns(3)
     with m_col1:
         st.metric("จำนวนกลุ่มตัวอย่างทั้งหมด", f"{total_records:,} ราย")
     with m_col2:
@@ -255,42 +278,143 @@ if show_viz:
     with m_col3:
         st.metric("พบความเสี่ยงโรคหัวใจ", f"{disease_count:,} ราย", f"{disease_pct:.1f}%")
 
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
-    viz_choice = st.selectbox(
-        "เลือกมุมมองแผนภูมิข้อมูลที่ต้องการวิเคราะห์:",
-        [
-            "เปรียบเทียบค่าเฉลี่ยตัวแปรสุขภาพสำคัญ (ปกติ vs พบโรคหัวใจ)",
-            "สัดส่วนปัจจัยเสี่ยงทางคลินิก (%)",
-            "สัดส่วนจำนวนผู้ป่วยตามผลการวินิจฉัย (Distribution)"
+    # 2 Charts Side-by-Side: Donut Chart & Grouped Bar Chart
+    chart_col1, chart_col2 = st.columns(2)
+
+    with chart_col1:
+        st.markdown('<div class="chart-card-header">แผนภาพวงกลม: สัดส่วนผลการวินิจฉัยโรคหัวใจ</div>', unsafe_allow_html=True)
+        pie_labels = ["สุขภาพปกติ", "พบความเสี่ยงโรคหัวใจ"]
+        pie_values = [normal_count, disease_count]
+        pie_colors = ['#38bdf8', '#1d4ed8']
+
+        if HAS_PLOTLY:
+            fig_pie = go.Figure(data=[go.Pie(
+                labels=pie_labels,
+                values=pie_values,
+                hole=0.58,
+                marker=dict(colors=pie_colors, line=dict(color='#0b0f19', width=2)),
+                textinfo='percent+label',
+                textposition='inside',
+                textfont=dict(size=12, color='#ffffff'),
+                hoverinfo='label+value+percent'
+            )])
+            fig_pie.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                showlegend=True,
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=-0.22,
+                    xanchor="center",
+                    x=0.5,
+                    font=dict(color='#94a3b8', size=11)
+                ),
+                margin=dict(t=15, b=35, l=15, r=15),
+                height=310
+            )
+            st.plotly_chart(fig_pie, use_container_width=True, config={'displayModeBar': False})
+        else:
+            fig, ax = plt.subplots(figsize=(5, 3.8), facecolor='#101726')
+            ax.set_facecolor('#101726')
+            wedges, texts, autotexts = ax.pie(
+                pie_values,
+                labels=pie_labels,
+                colors=pie_colors,
+                autopct='%1.1f%%',
+                startangle=90,
+                wedgeprops=dict(width=0.45, edgecolor='#0b0f19', linewidth=2),
+                textprops=dict(color='#f1f5f9', size=10)
+            )
+            for at in autotexts:
+                at.set_color('#ffffff')
+            st.pyplot(fig)
+
+    with chart_col2:
+        st.markdown('<div class="chart-card-header">แผนภูมิแท่ง: เปรียบเทียบค่าเฉลี่ยตัวแปรสำคัญ</div>', unsafe_allow_html=True)
+        bar_metrics = ["อายุ (ปี)", "ความดัน (mmHg)", "คอเลสเตอรอล", "อัตราเต้นหัวใจ"]
+        
+        # Calculate precise means
+        sub_norm = dt[dt['HeartDisease'] == 0]
+        sub_dise = dt[dt['HeartDisease'] == 1]
+        
+        val_norm = [
+            round(sub_norm['Age'].mean(), 1),
+            round(sub_norm['RestingBP'].mean(), 1),
+            round(sub_norm['Cholesterol'].mean(), 1),
+            round(sub_norm['MaxHR'].mean(), 1)
         ]
-    )
+        val_dise = [
+            round(sub_dise['Age'].mean(), 1),
+            round(sub_dise['RestingBP'].mean(), 1),
+            round(sub_dise['Cholesterol'].mean(), 1),
+            round(sub_dise['MaxHR'].mean(), 1)
+        ]
 
-    if viz_choice == "เปรียบเทียบค่าเฉลี่ยตัวแปรสุขภาพสำคัญ (ปกติ vs พบโรคหัวใจ)":
-        metrics_cols = ['Age', 'RestingBP', 'Cholesterol', 'MaxHR']
-        mean_df = dt.groupby('HeartDisease')[metrics_cols].mean().round(1).T
-        mean_df.columns = ["ไม่พบโรคหัวใจ", "พบความเสี่ยงโรคหัวใจ"]
-        mean_df.index = ["อายุเฉลี่ย (ปี)", "ความดันโลหิตเฉลี่ย (mmHg)", "คอเลสเตอรอลเฉลี่ย (mg/dl)", "อัตราเต้นหัวใจสูงสุด (bpm)"]
-        st.bar_chart(mean_df)
-        st.caption("เปรียบเทียบค่าเฉลี่ยตัวแปรสรีรวิทยาสำคัญ สเกลข้อมูลมีความสอดคล้องและสัมพันธ์กัน")
-
-    elif viz_choice == "สัดส่วนปัจจัยเสี่ยงทางคลินิก (%)":
-        risk_male = (dt.groupby('HeartDisease')['Sex'].mean() * 100).round(1)
-        risk_fbs = (dt.groupby('HeartDisease')['FastingBS'].mean() * 100).round(1)
-        risk_angina = (dt.groupby('HeartDisease')['ExerciseAngina'].mean() * 100).round(1)
-
-        risk_df = pd.DataFrame({
-            "ไม่พบโรคหัวใจ": [risk_male[0], risk_fbs[0], risk_angina[0]],
-            "พบความเสี่ยงโรคหัวใจ": [risk_male[1], risk_fbs[1], risk_angina[1]]
-        }, index=["เพศชาย (%)", "น้ำตาลในเลือดสูง >120 mg/dl (%)", "แน่นหน้าอกจากการออกกำลังกาย (%)"])
-        st.bar_chart(risk_df)
-        st.caption("สัดส่วนร้อยละของปัจจัยเสี่ยงทางคลินิกในแต่ละกลุ่ม (สเกลมาตรฐาน 0 - 100%)")
-
-    else:
-        target_counts = dt['HeartDisease'].value_counts().rename(index={0: "ไม่พบโรคหัวใจ", 1: "พบความเสี่ยงโรคหัวใจ"})
-        target_df = pd.DataFrame({"จำนวนกลุ่มตัวอย่าง (ราย)": target_counts})
-        st.bar_chart(target_df)
-        st.caption("สัดส่วนจำนวนกลุ่มตัวอย่างทั้งหมด 918 ราย จำแนกตามผลการวินิจฉัย")
+        if HAS_PLOTLY:
+            fig_bar = go.Figure()
+            fig_bar.add_trace(go.Bar(
+                x=bar_metrics,
+                y=val_norm,
+                name="สุขภาพปกติ",
+                marker_color='#38bdf8',
+                text=val_norm,
+                textposition='outside',
+                textfont=dict(color='#cbd5e1', size=11)
+            ))
+            fig_bar.add_trace(go.Bar(
+                x=bar_metrics,
+                y=val_dise,
+                name="พบความเสี่ยง",
+                marker_color='#1d4ed8',
+                text=val_dise,
+                textposition='outside',
+                textfont=dict(color='#cbd5e1', size=11)
+            ))
+            fig_bar.update_layout(
+                barmode='group',
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='#94a3b8'),
+                xaxis=dict(
+                    showgrid=False,
+                    tickfont=dict(color='#e2e8f0', size=11),
+                    linecolor='#1e2d4a'
+                ),
+                yaxis=dict(
+                    showgrid=True,
+                    gridcolor='#162238',
+                    tickfont=dict(color='#94a3b8', size=10),
+                    linecolor='#1e2d4a'
+                ),
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=-0.28,
+                    xanchor="center",
+                    x=0.5,
+                    font=dict(color='#94a3b8', size=11)
+                ),
+                margin=dict(t=15, b=45, l=15, r=15),
+                height=310
+            )
+            st.plotly_chart(fig_bar, use_container_width=True, config={'displayModeBar': False})
+        else:
+            fig, ax = plt.subplots(figsize=(5, 3.8), facecolor='#101726')
+            ax.set_facecolor('#101726')
+            x = np.arange(len(bar_metrics))
+            width = 0.35
+            rects1 = ax.bar(x - width/2, val_norm, width, label='สุขภาพปกติ', color='#38bdf8')
+            rects2 = ax.bar(x + width/2, val_dise, width, label='พบความเสี่ยง', color='#1d4ed8')
+            ax.set_xticks(x)
+            ax.set_xticklabels(bar_metrics, color='#e2e8f0', size=9)
+            ax.tick_params(colors='#94a3b8')
+            ax.legend(facecolor='#101726', edgecolor='#1e2d4a', labelcolor='#e2e8f0')
+            ax.bar_label(rects1, padding=2, color='#cbd5e1', size=8)
+            ax.bar_label(rects2, padding=2, color='#cbd5e1', size=8)
+            st.pyplot(fig)
 
 # Prediction Form Section
 st.markdown("""
