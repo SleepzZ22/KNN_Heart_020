@@ -28,19 +28,18 @@ dt = pd.read_csv("./data/Heart3.csv")
 st.write(dt.head(10))
 
 dt1 = dt['Age'].sum()
-col1, col2 = st.columns(2)
-with col1:
-   dt2 = dt['Sex'].sum()
-   dt3 = dt['ChestPainType'].sum()
-   dt4 = dt['RestingBP'].sum()
-   dt5 = dt['Cholesterol'].sum()
-   dt6 = dt['FastingBS'].sum()
-with col2:
-   dt7 = dt['RestingECG'].sum()
-   dt8 = dt['MaxHR'].sum()
-   dt9 = dt['ExerciseAngina'].sum()
-   dt10 = dt['Oldpeak'].sum()
-   dt11 = dt['ST_Slope'].sum()
+
+
+dt2 = dt['Sex'].sum()
+dt3 = dt['ChestPainType'].sum()
+dt4 = dt['RestingBP'].sum()
+dt5 = dt['Cholesterol'].sum()
+dt6 = dt['FastingBS'].sum()
+dt7 = dt['RestingECG'].sum()
+dt8 = dt['MaxHR'].sum()
+dt9 = dt['ExerciseAngina'].sum()
+dt10 = dt['Oldpeak'].sum()
+dt11 = dt['ST_Slope'].sum()
 
 dx = [dt1, dt2, dt3, dt4, dt5, dt6, dt7, dt8, dt9, dt10, dt11]
 dx2 = pd.DataFrame(dx, index=["d1", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9", "d10", "d11" ])
@@ -60,28 +59,22 @@ html_8 = """
 st.markdown(html_8, unsafe_allow_html=True)
 st.markdown("")
 
-#1
-pt_age = st.slider("กรุณาเลือกข้อมูล Age", min_value=0, max_value=100)
-#2
-pt_sex = st.number_input("กรุณาเลือกข้อมูล sex", min_value=0, max_value=1)
-#3
-sp_ChestPainType = st.number_input("กรุณาเลือกข้อมูล ChestPainType", min_value=0)
-#4
-sp_RestingBP = st.number_input("กรุณาเลือกข้อมูล RestingBP", min_value=0)
-#5
-sp_Cholesterol = st.number_input("กรุณาเลือกข้อมูล Cholesterol", min_value=0)  
-#6
-sp_FastingBS = st.number_input("กรุณาเลือกข้อมูล FastingBS", min_value=0, max_value=1)
-#7
-sp_RestingECG = st.number_input("กรุณาเลือกข้อมูล RestingECG", min_value=0)
-#8
-sp_MaxHR = st.number_input("กรุณาเลือกข้อมูล MaxHR", min_value=0)
-#9
-sp_ExerciseAngina = st.number_input("กรุณาเลือกข้อมูล ExerciseAngina", min_value=0, max_value=1)
-#10
-sp_Oldpeak = st.number_input("กรุณาเลือกข้อมูล Oldpeak", min_value=0)
-#11
-sp_ST_Slope = st.number_input("กรุณาเลือกข้อมูล ST_Slope", min_value=0)
+input_col1, input_col2 = st.columns(2)
+
+with input_col1:
+   pt_age = st.slider("กรุณาเลือกข้อมูล Age", min_value=0, max_value=100)
+   pt_sex = st.number_input("กรุณาเลือกข้อมูล sex", min_value=0, max_value=1)
+   sp_ChestPainType = st.number_input("กรุณาเลือกข้อมูล ChestPainType", min_value=0)
+   sp_RestingBP = st.number_input("กรุณาเลือกข้อมูล RestingBP", min_value=0)
+   sp_Cholesterol = st.number_input("กรุณาเลือกข้อมูล Cholesterol", min_value=0)
+   sp_FastingBS = st.number_input("กรุณาเลือกข้อมูล FastingBS", min_value=0, max_value=1)
+
+with input_col2:
+   sp_RestingECG = st.number_input("กรุณาเลือกข้อมูล RestingECG", min_value=0)
+   sp_MaxHR = st.number_input("กรุณาเลือกข้อมูล MaxHR", min_value=0)
+   sp_ExerciseAngina = st.number_input("กรุณาเลือกข้อมูล ExerciseAngina", min_value=0, max_value=1)
+   sp_Oldpeak = st.number_input("กรุณาเลือกข้อมูล Oldpeak", min_value=0)
+   sp_ST_Slope = st.number_input("กรุณาเลือกข้อมูล ST_Slope", min_value=0)
 
 if st.button("ทำนายผล"):
    #st.write("ทำนาย")
