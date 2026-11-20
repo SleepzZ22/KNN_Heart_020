@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-st.header("โปรเจคการจำแนกโรคหัวใจด้วย KNN")
+st.header("โปรเจคการจำแนกโรคหัวใจด้วย KNN",style={"text-align": "center"})
 #st.image("./img/kairung022.jpg")
 col1, col2 = st.columns(2)
 
